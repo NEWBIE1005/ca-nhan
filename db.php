@@ -1,13 +1,14 @@
 <?php
 // Cấu hình kết nối Cơ sở dữ liệu MySQL trên XAMPP
 $host = 'localhost';
+$port = '3307'; // Cấu hình cổng 3307 từ XAMPP Control Panel
 $dbname = 'quanlynhahang';
 $username = 'root';
 $password = '';
 
 try {
-    // Kết nối CSDL bằng PDO
-    $conn = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
+    // Kết nối CSDL bằng PDO (thêm tham số port)
+    $conn = new PDO("mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4", $username, $password);
     // Thiết lập chế độ báo lỗi ngoại lệ
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     // Thiết lập chế độ fetch mặc định là Array Assoc
