@@ -1,63 +1,49 @@
-# GastroFlow POS - Quản Lý Nhà Hàng CRUD (Bootstrap & PHP & MySQL)
+# GastroFlow Logistics - Hệ Thống Quản Lý Nhà Vận Chuyển (Bootstrap & PHP & MySQL)
 
-GastroFlow POS là ứng dụng web quản trị và quản lý nhà hàng chạy trên môi trường **XAMPP** sử dụng ngôn ngữ **PHP**, giao diện khung **Bootstrap 5** và cơ sở dữ liệu **MySQL**. Hệ thống tập trung vào tính năng CRUD (Thêm, Sửa, Xóa) cho hai phân hệ cốt lõi: **Quản lý Bàn Ăn** và **Quản lý Thực Đơn**.
-
----
-
-## 🌟 Chức Năng Chính
-
-1. **Quản Lý Bàn Ăn (CRUD)**:
-   - Hiển thị danh sách bàn ăn (Mã bàn, Tên bàn, Số lượng ghế, Trạng thái).
-   - Thêm bàn ăn mới với số ghế và trạng thái tùy chọn.
-   - Chỉnh sửa thông tin chi tiết của bàn ăn (Tên bàn, số ghế, thay đổi trạng thái: Trống, Đang phục vụ, Đã đặt).
-   - Xóa bàn ăn khỏi danh sách.
-
-2. **Quản Lý Thực Đơn (CRUD)**:
-   - Hiển thị danh sách món ăn kèm hình ảnh đại diện trực quan, giá bán, phân loại và trạng thái.
-   - Thêm món ăn mới vào thực đơn (hỗ trợ nhập URL ảnh, đơn giá, phân nhóm món ăn).
-   - Chỉnh sửa chi tiết món ăn (tên món, giá, phân nhóm, cập nhật trạng thái: Còn món, Hết món).
-   - Xóa món ăn khỏi thực đơn.
+GastroFlow Logistics là ứng dụng web quản lý danh sách và dịch vụ của các đơn vị nhà vận chuyển (shipping carriers, nhà xe). Dự án được thiết kế đẹp mắt với giao diện **Bootstrap 5 (Dark theme)** kết hợp kết nối cơ sở dữ liệu **MySQL trên XAMPP (qua cổng 3307)** và có đầy đủ tính năng CRUD (Thêm, Sửa, Xóa).
 
 ---
 
-## 🛠️ Yêu Cầu Hệ Thống & Cài Đặt trên XAMPP
+## 🌟 Chức Năng Cốt Lõi
 
-Để chạy được dự án, bạn cần cài đặt phần mềm **XAMPP** trên máy tính:
+1. **Thống kê nhanh**:
+   - Hiển thị tổng số nhà xe trong danh sách.
+   - Thống kê số lượng đơn vị đang hoạt động bình thường.
+   - Tính toán mức phí vận chuyển cơ bản trung bình của các nhà xe.
+   - Thống kê các đơn vị đang tạm dừng hoạt động.
 
-### Bước 1: Di chuyển thư mục dự án
-1. Đảm bảo thư mục dự án `quanlynhahang` nằm trong thư mục `htdocs` của XAMPP.
-   - Đường dẫn thông thường trên Windows: `C:\xampp\htdocs\quanlynhahang`.
+2. **Tìm kiếm & Bộ lọc**:
+   - Thanh tìm kiếm thông minh hỗ trợ lọc nhà xe theo Tên nhà vận chuyển, Địa chỉ hoặc Loại hình dịch vụ.
 
-### Bước 2: Khởi động XAMPP Control Panel
-1. Mở phần mềm **XAMPP Control Panel**.
-2. Bấm nút **Start** cho cả hai dịch vụ: **Apache** và **MySQL**.
-
-### Bước 3: Tạo và Import Cơ sở dữ liệu
-1. Mở trình duyệt và truy cập: [http://localhost/phpmyadmin/](http://localhost/phpmyadmin/).
-2. Bấm vào nút **Mới (New)** ở cột bên trái để tạo Cơ sở dữ liệu mới.
-3. Nhập tên Cơ sở dữ liệu là: `quanlynhahang` (chọn đối chiếu `utf8mb4_unicode_ci`) rồi nhấn **Tạo (Create)**.
-4. Bấm chọn database `quanlynhahang` vừa tạo, chọn tab **Nhập (Import)** ở menu trên cùng.
-5. Nhấn **Chọn tệp (Choose File)**, chọn file `database.sql` nằm trong thư mục dự án (`C:\xampp\htdocs\quanlynhahang\database.sql`).
-6. Kéo xuống dưới cùng và nhấn **Nhập (Import)**.
+3. **CRUD Nhà Vận Chuyển**:
+   - **Thêm mới**: Form modal nhập Tên nhà xe, Số điện thoại, Email, Địa chỉ, Chọn dịch vụ (Tiết kiệm, Hỏa tốc, Cồng kềnh, Hành khách), Phí cơ bản và Trạng thái.
+   - **Chỉnh sửa**: Cập nhật thông tin chi tiết của nhà xe bất kỳ bằng form modal.
+   - **Xóa**: Hủy đăng ký đơn vị vận chuyển khỏi hệ thống thông qua hộp thoại xác nhận.
 
 ---
 
-## 🚀 Cách Chạy Ứng Dụng
+## 🛠️ Hướng Dẫn Cài Đặt trên XAMPP
 
-Sau khi hoàn tất cài đặt, bạn truy cập đường dẫn sau trên trình duyệt:
-
-[http://localhost/quanlynhahang/](http://localhost/quanlynhahang/)
+1. **Di chuyển thư mục**:
+   - Đảm bảo thư mục dự án `quanlynhahang` nằm tại `C:\xampp\htdocs\quanlynhahang`.
+2. **Khởi chạy XAMPP**:
+   - Bật **Apache** và **MySQL** trên **XAMPP Control Panel**.
+   - Chú ý: Cấu hình cổng MySQL trên máy của bạn đang chạy ở cổng **3307**.
+3. **Import database**:
+   - Truy cập: [http://localhost/phpmyadmin/](http://localhost/phpmyadmin/).
+   - Tạo database tên `quanlynhahang` (đối chiếu `utf8mb4_unicode_ci`).
+   - Chọn database `quanlynhahang`, bấm **Nhập (Import)** và chọn tệp `database.sql` trong thư mục dự án để cài đặt cấu trúc bảng `nha_van_chuyen` cùng dữ liệu mẫu.
 
 ---
 
-## 📂 Cấu Trúc Dự Án
+## 🚀 Khởi Chạy Ứng Dụng
 
-```text
-quanlynhahang/
-│
-├── index.php        # Trang giao diện chính và xử lý logic CRUD (Bootstrap 5 & PHP)
-├── db.php           # Tệp kết nối Cơ sở dữ liệu MySQL bằng PDO
-├── database.sql     # Tệp khởi tạo cấu trúc CSDL và chèn dữ liệu mẫu
-├── .gitignore       # Bỏ qua các file rác của hệ thống/IDE khi đẩy lên Git
-└── README.md        # Tài liệu hướng dẫn sử dụng tiếng Việt
-```
+Sau khi cấu hình XAMPP xong, bạn có thể chạy ứng dụng bằng 2 cách:
+
+* **Cách 1 (XAMPP Server)**: Truy cập đường dẫn:
+  [http://localhost/quanlynhahang/](http://localhost/quanlynhahang/)
+
+* **Cách 2 (PHP Dev Server)**:
+  1. Mở terminal tại thư mục dự án.
+  2. Khởi động server: `C:\xampp\php\php.exe -S localhost:8000`.
+  3. Truy cập địa chỉ: [http://localhost:8000/](http://localhost:8000/).

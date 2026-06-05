@@ -9,69 +9,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $action = $_POST['action'];
         
         try {
-            // 1. THÊM BÀN ĂN
-            if ($action === 'add_table') {
-                $ten_ban = trim($_POST['ten_ban']);
-                $so_ghe = intval($_POST['so_ghe']);
+            // 1. THÊM NHÀ VẬN CHUYỂN
+            if ($action === 'add_carrier') {
+                $ten_nha_xe = trim($_POST['ten_nha_xe']);
+                $so_dien_thoai = trim($_POST['so_dien_thoai']);
+                $email = trim($_POST['email']);
+                $dia_chi = trim($_POST['dia_chi']);
+                $loai_dich_vu = $_POST['loai_dich_vu'];
+                $phi_co_ban = intval($_POST['phi_co_ban']);
                 $trang_thai = $_POST['trang_thai'];
                 
-                $stmt = $conn->prepare("INSERT INTO ban_an (ten_ban, so_ghe, trang_thai) VALUES (?, ?, ?)");
-                $stmt->execute([$ten_ban, $so_ghe, $trang_thai]);
-                $_SESSION['toast'] = ['message' => "Đã thêm '$ten_ban' thành công!", 'type' => 'success'];
+                $stmt = $conn->prepare("INSERT INTO nha_van_chuyen (ten_nha_xe, so_dien_thoai, email, dia_chi, loai_dich_vu, phi_co_ban, trang_thai) VALUES (?, ?, ?, ?, ?, ?, ?)");
+                $stmt->execute([$ten_nha_xe, $so_dien_thoai, $email, $dia_chi, $loai_dich_vu, $phi_co_ban, $trang_thai]);
+                $_SESSION['toast'] = ['message' => "Đã thêm nhà xe '$ten_nha_xe' thành công!", 'type' => 'success'];
             }
-            // 2. SỬA BÀN ĂN
-            elseif ($action === 'edit_table') {
+            // 2. SỬA NHÀ VẬN CHUYỂN
+            elseif ($action === 'edit_carrier') {
                 $id = intval($_POST['id']);
-                $ten_ban = trim($_POST['ten_ban']);
-                $so_ghe = intval($_POST['so_ghe']);
+                $ten_nha_xe = trim($_POST['ten_nha_xe']);
+                $so_dien_thoai = trim($_POST['so_dien_thoai']);
+                $email = trim($_POST['email']);
+                $dia_chi = trim($_POST['dia_chi']);
+                $loai_dich_vu = $_POST['loai_dich_vu'];
+                $phi_co_ban = intval($_POST['phi_co_ban']);
                 $trang_thai = $_POST['trang_thai'];
                 
-                $stmt = $conn->prepare("UPDATE ban_an SET ten_ban = ?, so_ghe = ?, trang_thai = ? WHERE id = ?");
-                $stmt->execute([$ten_ban, $so_ghe, $trang_thai, $id]);
-                $_SESSION['toast'] = ['message' => "Đã cập nhật '$ten_ban' thành công!", 'type' => 'success'];
+                $stmt = $conn->prepare("UPDATE nha_van_chuyen SET ten_nha_xe = ?, so_dien_thoai = ?, email = ?, dia_chi = ?, loai_dich_vu = ?, phi_co_ban = ?, trang_thai = ? WHERE id = ?");
+                $stmt->execute([$ten_nha_xe, $so_dien_thoai, $email, $dia_chi, $loai_dich_vu, $phi_co_ban, $trang_thai, $id]);
+                $_SESSION['toast'] = ['message' => "Đã cập nhật thông tin '$ten_nha_xe' thành công!", 'type' => 'success'];
             }
-            // 3. XÓA BÀN ĂN
-            elseif ($action === 'delete_table') {
+            // 3. XÓA NHÀ VẬN CHUYỂN
+            elseif ($action === 'delete_carrier') {
                 $id = intval($_POST['id']);
-                $ten_ban = $_POST['ten_ban_delete'];
+                $ten_nha_xe = $_POST['ten_nha_xe_delete'];
                 
-                $stmt = $conn->prepare("DELETE FROM ban_an WHERE id = ?");
+                $stmt = $conn->prepare("DELETE FROM nha_van_chuyen WHERE id = ?");
                 $stmt->execute([$id]);
-                $_SESSION['toast'] = ['message' => "Đã xóa bàn ăn '$ten_ban'!", 'type' => 'danger'];
-            }
-            // 4. THÊM MÓN ĂN
-            elseif ($action === 'add_menu') {
-                $ten_mon = trim($_POST['ten_mon']);
-                $gia = intval($_POST['gia']);
-                $phan_loai = $_POST['phan_loai'];
-                $hinh_anh = trim($_POST['hinh_anh']) ?: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300';
-                $trang_thai = $_POST['trang_thai'];
-                
-                $stmt = $conn->prepare("INSERT INTO mon_an (ten_mon, gia, phan_loai, hinh_anh, trang_thai) VALUES (?, ?, ?, ?, ?)");
-                $stmt->execute([$ten_mon, $gia, $phan_loai, $hinh_anh, $trang_thai]);
-                $_SESSION['toast'] = ['message' => "Đã thêm món '$ten_mon' vào thực đơn!", 'type' => 'success'];
-            }
-            // 5. SỬA MÓN ĂN
-            elseif ($action === 'edit_menu') {
-                $id = intval($_POST['id']);
-                $ten_mon = trim($_POST['ten_mon']);
-                $gia = intval($_POST['gia']);
-                $phan_loai = $_POST['phan_loai'];
-                $hinh_anh = trim($_POST['hinh_anh']) ?: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=300';
-                $trang_thai = $_POST['trang_thai'];
-                
-                $stmt = $conn->prepare("UPDATE mon_an SET ten_mon = ?, gia = ?, phan_loai = ?, hinh_anh = ?, trang_thai = ? WHERE id = ?");
-                $stmt->execute([$ten_mon, $gia, $phan_loai, $hinh_anh, $trang_thai, $id]);
-                $_SESSION['toast'] = ['message' => "Đã cập nhật món '$ten_mon'!", 'type' => 'success'];
-            }
-            // 6. XÓA MÓN ĂN
-            elseif ($action === 'delete_menu') {
-                $id = intval($_POST['id']);
-                $ten_mon = $_POST['ten_mon_delete'];
-                
-                $stmt = $conn->prepare("DELETE FROM mon_an WHERE id = ?");
-                $stmt->execute([$id]);
-                $_SESSION['toast'] = ['message' => "Đã xóa món '$ten_mon' khỏi thực đơn!", 'type' => 'danger'];
+                $_SESSION['toast'] = ['message' => "Đã xóa nhà vận chuyển '$ten_nha_xe'!", 'type' => 'danger'];
             }
         } catch (Exception $e) {
             $_SESSION['toast'] = ['message' => "Đã xảy ra lỗi: " . $e->getMessage(), 'type' => 'danger'];
@@ -83,20 +57,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// --- TRUY VẤN DỮ LIỆU ĐỂ HIỂN THỊ ---
-$tables = $conn->query("SELECT * FROM ban_an ORDER BY ten_ban ASC")->fetchAll();
-$menu_items = $conn->query("SELECT * FROM mon_an ORDER BY id DESC")->fetchAll();
+// --- XỬ LÝ TÌM KIẾM ---
+$search = isset($_GET['search']) ? trim($_GET['search']) : '';
+if ($search !== '') {
+    $stmt = $conn->prepare("SELECT * FROM nha_van_chuyen WHERE ten_nha_xe LIKE ? OR dia_chi LIKE ? OR loai_dich_vu LIKE ? ORDER BY id DESC");
+    $stmt->execute(["%$search%", "%$search%", "%$search%"]);
+    $carriers = $stmt->fetchAll();
+} else {
+    $carriers = $conn->query("SELECT * FROM nha_van_chuyen ORDER BY id DESC")->fetchAll();
+}
+
+// --- THỐNG KÊ NHANH ---
+$stat_total = count($carriers);
+$stat_active = 0;
+$stat_inactive = 0;
+$total_fee = 0;
+foreach ($carriers as $c) {
+    if ($c['trang_thai'] === 'active') {
+        $stat_active++;
+    } else {
+        $stat_inactive++;
+    }
+    $total_fee += $c['phi_co_ban'];
+}
+$stat_avg_fee = $stat_total > 0 ? Math_round($total_fee / $stat_total) : 0;
+
+function Math_round($val) {
+    return round($val);
+}
 
 // Lấy thông báo toast nếu có
 $toast = isset($_SESSION['toast']) ? $_SESSION['toast'] : null;
-unset($_SESSION['toast']); // Xóa sau khi đã lấy
+unset($_SESSION['toast']);
 ?>
 <!DOCTYPE html>
 <html lang="vi" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GastroFlow - Admin CRUD</title>
+    <title>GastroFlow - Quản Lý Nhà Vận Chuyển</title>
     <!-- Bootstrap 5 CSS (Theme Dark) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Google Fonts -->
@@ -122,21 +121,14 @@ unset($_SESSION['toast']); // Xóa sau khi đã lấy
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 16px;
         }
-        .table-image {
-            width: 50px;
-            height: 50px;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-        .nav-pills .nav-link {
-            border-radius: 10px;
-            font-weight: 600;
-            padding: 10px 20px;
-            color: #94a3b8;
-        }
-        .nav-pills .nav-link.active {
-            background-color: #6366f1;
-            color: white;
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-size: 20px;
         }
     </style>
 </head>
@@ -145,10 +137,10 @@ unset($_SESSION['toast']); // Xóa sau khi đã lấy
     <!-- Header / Navbar -->
     <nav class="navbar navbar-expand-lg border-bottom border-secondary border-opacity-25 py-3">
         <div class="container">
-            <span class="navbar-brand fs-4"><i class="fa-solid fa-fire-burner me-2 text-primary"></i>GastroFlow POS</span>
+            <span class="navbar-brand fs-4"><i class="fa-solid fa-truck-fast me-2 text-primary"></i>GastroFlow Logistics</span>
             <div class="d-flex align-items-center">
                 <span class="badge bg-primary bg-opacity-10 text-primary py-2 px-3 border border-primary border-opacity-25 rounded-pill">
-                    <i class="fa-solid fa-server me-1"></i> XAMPP Localhost Connected
+                    <i class="fa-solid fa-database me-1"></i> XAMPP MySQL Cổng 3307 Connected
                 </span>
             </div>
         </div>
@@ -157,208 +149,218 @@ unset($_SESSION['toast']); // Xóa sau khi đã lấy
     <!-- Main Content -->
     <div class="container my-5">
         
-        <!-- Tab Selectors -->
-        <div class="row mb-4">
-            <div class="col-12 text-center d-flex justify-content-center">
-                <ul class="nav nav-pills bg-secondary bg-opacity-10 p-1 rounded-pill" id="pills-tab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link active rounded-pill" id="pills-tables-tab" data-bs-toggle="pill" data-bs-target="#pills-tables" type="button" role="tab" aria-controls="pills-tables" aria-selected="true">
-                            <i class="fa-solid fa-table-cells-large me-2"></i>Quản Lý Bàn Ăn
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link rounded-pill" id="pills-menu-tab" data-bs-toggle="pill" data-bs-target="#pills-menu" type="button" role="tab" aria-controls="pills-menu" aria-selected="false">
-                            <i class="fa-solid fa-utensils me-2"></i>Quản Lý Thực Đơn
-                        </button>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- Tab Content -->
-        <div class="tab-content" id="pills-tabContent">
-            
-            <!-- TAB 1: BÀN ĂN -->
-            <div class="tab-pane fade show active" id="pills-tables" role="tabpanel" aria-labelledby="pills-tables-tab">
-                <div class="glass-card p-4">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h4 class="mb-0 fw-bold"><i class="fa-solid fa-chair text-primary me-2"></i>Danh sách Bàn Ăn</h4>
-                        <button class="btn btn-primary rounded-3 px-3" data-bs-toggle="modal" data-bs-target="#addTableModal">
-                            <i class="fa-solid fa-plus me-1"></i>Thêm Bàn Mới
-                        </button>
+        <!-- Statistics Section -->
+        <div class="row g-4 mb-5">
+            <!-- Stat 1 -->
+            <div class="col-6 col-md-3">
+                <div class="glass-card p-3 d-flex align-items-center gap-3">
+                    <div class="stat-icon bg-primary bg-opacity-15 text-primary">
+                        <i class="fa-solid fa-shipping-fast"></i>
                     </div>
-
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="table-dark text-secondary text-uppercase fs-7">
-                                <tr>
-                                    <th>Mã Bàn</th>
-                                    <th>Tên Bàn</th>
-                                    <th>Số Ghế</th>
-                                    <th>Trạng Thái</th>
-                                    <th class="text-end">Hành Động</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php if (empty($tables)): ?>
-                                    <tr>
-                                        <td colspan="5" class="text-center py-4 text-muted">Chưa có dữ liệu bàn ăn nào. Hãy thêm mới!</td>
-                                    </tr>
-                                <?php else: ?>
-                                    <?php foreach ($tables as $table): ?>
-                                        <tr>
-                                            <td><strong>#<?php echo $table['id']; ?></strong></td>
-                                            <td><span class="fw-semibold"><?php echo htmlspecialchars($table['ten_ban']); ?></span></td>
-                                            <td><?php echo $table['so_ghe']; ?> ghế</td>
-                                            <td>
-                                                <?php if ($table['trang_thai'] === 'empty'): ?>
-                                                    <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 px-2 py-1 rounded">Trống</span>
-                                                <?php elseif ($table['trang_thai'] === 'serving'): ?>
-                                                    <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1 rounded">Đang Phục Vụ</span>
-                                                <?php elseif ($table['trang_thai'] === 'reserved'): ?>
-                                                    <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 px-2 py-1 rounded">Đã Đặt Trước</span>
-                                                <?php endif; ?>
-                                            </td>
-                                            <td class="text-end">
-                                                <button class="btn btn-outline-warning btn-sm me-1 rounded-3 edit-table-btn" 
-                                                        data-bs-toggle="modal" 
-                                                        data-bs-target="#editTableModal"
-                                                        data-id="<?php echo $table['id']; ?>"
-                                                        data-name="<?php echo htmlspecialchars($table['ten_ban']); ?>"
-                                                        data-seats="<?php echo $table['so_ghe']; ?>"
-                                                        data-status="<?php echo $table['trang_thai']; ?>">
-                                                    <i class="fa-solid fa-pen"></i> Sửa
-                                                </button>
-                                                <button class="btn btn-outline-danger btn-sm rounded-3 delete-table-btn"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#deleteTableModal"
-                                                        data-id="<?php echo $table['id']; ?>"
-                                                        data-name="<?php echo htmlspecialchars($table['ten_ban']); ?>">
-                                                    <i class="fa-solid fa-trash"></i> Xóa
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
+                    <div>
+                        <span class="text-secondary fs-7 d-block">Tổng nhà xe</span>
+                        <h4 class="mb-0 fw-bold"><?php echo $stat_total; ?></h4>
                     </div>
                 </div>
             </div>
-
-            <!-- TAB 2: THỰC ĐƠN -->
-            <div class="tab-pane fade" id="pills-menu" role="tabpanel" aria-labelledby="pills-menu-tab">
-                <div class="glass-card p-4">
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h4 class="mb-0 fw-bold"><i class="fa-solid fa-utensils text-primary me-2"></i>Danh sách Thực Đơn</h4>
-                        <button class="btn btn-primary rounded-3 px-3" data-bs-toggle="modal" data-bs-target="#addMenuModal">
-                            <i class="fa-solid fa-plus me-1"></i>Thêm Món Mới
-                        </button>
+            <!-- Stat 2 -->
+            <div class="col-6 col-md-3">
+                <div class="glass-card p-3 d-flex align-items-center gap-3">
+                    <div class="stat-icon bg-success bg-opacity-15 text-success">
+                        <i class="fa-solid fa-circle-check"></i>
                     </div>
-
-                    <div class="table-responsive">
-                        <table class="table table-hover align-middle mb-0">
-                            <thead class="table-dark text-secondary text-uppercase fs-7">
-                                <tr>
-                                    <th>Ảnh</th>
-                                    <th>Tên Món</th>
-                                    <th>Phân Nhóm</th>
-                                    <th>Đơn Giá</th>
-                                    <th>Trạng Thái</th>
-                                    <th class="text-end">Hành Động</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php if (empty($menu_items)): ?>
-                                    <tr>
-                                        <td colspan="6" class="text-center py-4 text-muted">Chưa có món ăn nào trong thực đơn. Hãy thêm mới!</td>
-                                    </tr>
-                                <?php else: ?>
-                                    <?php foreach ($menu_items as $item): ?>
-                                        <tr>
-                                            <td>
-                                                <img src="<?php echo htmlspecialchars($item['hinh_anh']); ?>" alt="Food image" class="table-image border border-secondary border-opacity-25">
-                                            </td>
-                                            <td><span class="fw-bold"><?php echo htmlspecialchars($item['ten_mon']); ?></span></td>
-                                            <td>
-                                                <?php 
-                                                $categories = [
-                                                    'khaivi' => 'Khai Vị',
-                                                    'monchinh' => 'Món Chính',
-                                                    'douong' => 'Đồ Uống',
-                                                    'trangmieng' => 'Tráng Miệng'
-                                                ];
-                                                echo isset($categories[$item['phan_loai']]) ? $categories[$item['phan_loai']] : htmlspecialchars($item['phan_loai']);
-                                                ?>
-                                            </td>
-                                            <td class="text-primary fw-semibold"><?php echo number_format($item['gia'], 0, ',', '.'); ?> đ</td>
-                                            <td>
-                                                <?php if ($item['trang_thai'] === 'available'): ?>
-                                                    <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1 rounded">Còn món</span>
-                                                <?php else: ?>
-                                                    <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-2 py-1 rounded">Hết món</span>
-                                                <?php endif; ?>
-                                            </td>
-                                            <td class="text-end">
-                                                <button class="btn btn-outline-warning btn-sm me-1 rounded-3 edit-menu-btn" 
-                                                        data-bs-toggle="modal" 
-                                                        data-bs-target="#editMenuModal"
-                                                        data-id="<?php echo $item['id']; ?>"
-                                                        data-name="<?php echo htmlspecialchars($item['ten_mon']); ?>"
-                                                        data-price="<?php echo $item['gia']; ?>"
-                                                        data-category="<?php echo $item['phan_loai']; ?>"
-                                                        data-image="<?php echo htmlspecialchars($item['hinh_anh']); ?>"
-                                                        data-status="<?php echo $item['trang_thai']; ?>">
-                                                    <i class="fa-solid fa-pen"></i> Sửa
-                                                </button>
-                                                <button class="btn btn-outline-danger btn-sm rounded-3 delete-menu-btn"
-                                                        data-bs-toggle="modal"
-                                                        data-bs-target="#deleteMenuModal"
-                                                        data-id="<?php echo $item['id']; ?>"
-                                                        data-name="<?php echo htmlspecialchars($item['ten_mon']); ?>">
-                                                    <i class="fa-solid fa-trash"></i> Xóa
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
-                                <?php endif; ?>
-                            </tbody>
-                        </table>
+                    <div>
+                        <span class="text-secondary fs-7 d-block">Đang hoạt động</span>
+                        <h4 class="mb-0 fw-bold"><?php echo $stat_active; ?></h4>
                     </div>
                 </div>
             </div>
-
+            <!-- Stat 3 -->
+            <div class="col-6 col-md-3">
+                <div class="glass-card p-3 d-flex align-items-center gap-3">
+                    <div class="stat-icon bg-warning bg-opacity-15 text-warning">
+                        <i class="fa-solid fa-calculator"></i>
+                    </div>
+                    <div>
+                        <span class="text-secondary fs-7 d-block">Phí cơ bản TB</span>
+                        <h4 class="mb-0 fw-bold"><?php echo number_format($stat_avg_fee, 0, ',', '.'); ?> đ</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- Stat 4 -->
+            <div class="col-6 col-md-3">
+                <div class="glass-card p-3 d-flex align-items-center gap-3">
+                    <div class="stat-icon bg-danger bg-opacity-15 text-danger">
+                        <i class="fa-solid fa-circle-pause"></i>
+                    </div>
+                    <div>
+                        <span class="text-secondary fs-7 d-block">Tạm dừng hoạt động</span>
+                        <h4 class="mb-0 fw-bold"><?php echo $stat_inactive; ?></h4>
+                    </div>
+                </div>
+            </div>
         </div>
+
+        <!-- CRUD Actions & Search Area -->
+        <div class="row mb-4 align-items-center g-3">
+            <div class="col-md-8 col-12">
+                <form action="index.php" method="GET" class="d-flex gap-2">
+                    <div class="input-group">
+                        <span class="input-group-text bg-dark border-secondary text-secondary"><i class="fa-solid fa-magnifying-glass"></i></span>
+                        <input type="text" name="search" class="form-control bg-dark border-secondary text-light" placeholder="Tìm kiếm nhà vận chuyển, loại dịch vụ, địa chỉ..." value="<?php echo htmlspecialchars($search); ?>">
+                    </div>
+                    <button type="submit" class="btn btn-outline-primary px-3"><i class="fa-solid fa-filter"></i> Lọc</button>
+                    <?php if ($search !== ''): ?>
+                        <a href="index.php" class="btn btn-text text-secondary d-flex align-items-center text-nowrap"><i class="fa-solid fa-rotate-left me-1"></i>Đặt lại</a>
+                    <?php endif; ?>
+                </form>
+            </div>
+            <div class="col-md-4 col-12 text-md-end">
+                <button class="btn btn-primary rounded-3 w-100 w-md-auto py-2 px-4" data-bs-toggle="modal" data-bs-target="#addCarrierModal">
+                    <i class="fa-solid fa-plus me-2"></i>Thêm Nhà Vận Chuyển
+                </button>
+            </div>
+        </div>
+
+        <!-- Data Table Container -->
+        <div class="glass-card p-4">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-dark text-secondary text-uppercase fs-7">
+                        <tr>
+                            <th>Nhà xe / Tên vận chuyển</th>
+                            <th>Thông tin liên hệ</th>
+                            <th>Địa chỉ hoạt động</th>
+                            <th>Dịch vụ</th>
+                            <th>Phí cơ bản</th>
+                            <th>Trạng Thái</th>
+                            <th class="text-end">Thao Tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php if (empty($carriers)): ?>
+                            <tr>
+                                <td colspan="7" class="text-center py-5 text-muted">
+                                    <i class="fa-solid fa-truck-moving fa-3x mb-3 text-secondary opacity-25"></i>
+                                    <p class="mb-0">Không tìm thấy nhà vận chuyển nào phù hợp.</p>
+                                </td>
+                            </tr>
+                        <?php else: ?>
+                            <?php foreach ($carriers as $carrier): ?>
+                                <tr>
+                                    <td>
+                                        <div class="fw-bold fs-6"><?php echo htmlspecialchars($carrier['ten_nha_xe']); ?></div>
+                                        <span class="text-secondary fs-7">Mã: #CAR-<?php echo $carrier['id']; ?></span>
+                                    </td>
+                                    <td>
+                                        <div class="fs-7 text-light"><i class="fa-solid fa-phone me-1 text-secondary"></i><?php echo htmlspecialchars($carrier['so_dien_thoai']); ?></div>
+                                        <div class="fs-7 text-secondary"><i class="fa-solid fa-envelope me-1"></i><?php echo htmlspecialchars($carrier['email']); ?></div>
+                                    </td>
+                                    <td style="max-width: 250px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;" title="<?php echo htmlspecialchars($carrier['dia_chi']); ?>">
+                                        <?php echo htmlspecialchars($carrier['dia_chi']); ?>
+                                    </td>
+                                    <td>
+                                        <?php 
+                                        $srv = $carrier['loai_dich_vu'];
+                                        if ($srv === 'hoatoc') echo '<span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25">Hỏa Tốc</span>';
+                                        elseif ($srv === 'tietkiem') echo '<span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">Tiết Kiệm</span>';
+                                        elseif ($srv === 'congkenh') echo '<span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25">Hàng Cồng Kềnh</span>';
+                                        elseif ($srv === 'hanhkhach') echo '<span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25">Hành Khách</span>';
+                                        else echo '<span class="badge bg-secondary">'.htmlspecialchars($srv).'</span>';
+                                        ?>
+                                    </td>
+                                    <td class="text-primary fw-semibold"><?php echo number_format($carrier['phi_co_ban'], 0, ',', '.'); ?> đ</td>
+                                    <td>
+                                        <?php if ($carrier['trang_thai'] === 'active'): ?>
+                                            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1 rounded">Hoạt động</span>
+                                        <?php else: ?>
+                                            <span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-2 py-1 rounded">Tạm dừng</span>
+                                        <?php endif; ?>
+                                    </td>
+                                    <td class="text-end">
+                                        <button class="btn btn-outline-warning btn-sm me-1 rounded-3 edit-carrier-btn" 
+                                                data-bs-toggle="modal" 
+                                                data-bs-target="#editCarrierModal"
+                                                data-id="<?php echo $carrier['id']; ?>"
+                                                data-name="<?php echo htmlspecialchars($carrier['ten_nha_xe']); ?>"
+                                                data-phone="<?php echo htmlspecialchars($carrier['so_dien_thoai']); ?>"
+                                                data-email="<?php echo htmlspecialchars($carrier['email']); ?>"
+                                                data-address="<?php echo htmlspecialchars($carrier['dia_chi']); ?>"
+                                                data-service="<?php echo htmlspecialchars($carrier['loai_dich_vu']); ?>"
+                                                data-fee="<?php echo $carrier['phi_co_ban']; ?>"
+                                                data-status="<?php echo htmlspecialchars($carrier['trang_thai']); ?>">
+                                            <i class="fa-solid fa-pen"></i> Sửa
+                                        </button>
+                                        <button class="btn btn-outline-danger btn-sm rounded-3 delete-carrier-btn"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#deleteCarrierModal"
+                                                data-id="<?php echo $carrier['id']; ?>"
+                                                data-name="<?php echo htmlspecialchars($carrier['ten_nha_xe']); ?>">
+                                            <i class="fa-solid fa-trash"></i> Xóa
+                                        </button>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
     </div>
 
     <!-- ==========================================
-         MODALS CHO BÀN ĂN
+         MODALS FOR CARRIERS
          ========================================== -->
-    <!-- Modal: Thêm bàn -->
-    <div class="modal fade" id="addTableModal" tabindex="-1" aria-hidden="true">
+    <!-- Modal: Thêm nhà vận chuyển -->
+    <div class="modal fade" id="addCarrierModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content glass-card">
                 <div class="modal-header border-secondary border-opacity-25">
-                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-plus me-2 text-primary"></i>Thêm Bàn Ăn Mới</h5>
+                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-plus me-2 text-primary"></i>Thêm Nhà Vận Chuyển</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form action="index.php" method="POST">
-                    <input type="hidden" name="action" value="add_table">
+                    <input type="hidden" name="action" value="add_carrier">
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="add-ten-ban" class="form-label">Tên Bàn / Số Bàn <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control bg-dark border-secondary text-light" id="add-ten-ban" name="ten_ban" required placeholder="Ví dụ: Bàn 13">
+                            <label for="add-ten" class="form-label">Tên Nhà Xe / Đơn vị <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control bg-dark border-secondary text-light" id="add-ten" name="ten_nha_xe" required placeholder="Ví dụ: Giao Hàng Nhanh">
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label for="add-sdt" class="form-label">Số điện thoại <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control bg-dark border-secondary text-light" id="add-sdt" name="so_dien_thoai" required placeholder="Ví dụ: 19001200">
+                            </div>
+                            <div class="col-6">
+                                <label for="add-email" class="form-label">Email <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control bg-dark border-secondary text-light" id="add-email" name="email" required placeholder="cskh@gmail.com">
+                            </div>
                         </div>
                         <div class="mb-3">
-                            <label for="add-so-ghe" class="form-label">Số Ghế <span class="text-danger">*</span></label>
-                            <input type="number" class="form-control bg-dark border-secondary text-light" id="add-so-ghe" name="so_ghe" min="1" max="50" required value="4">
+                            <label for="add-diachi" class="form-label">Địa Chỉ Hoạt Động <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control bg-dark border-secondary text-light" id="add-diachi" name="dia_chi" required placeholder="Địa chỉ trụ sở chính">
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label for="add-dichvu" class="form-label">Phân Loại Dịch Vụ</label>
+                                <select class="form-select bg-dark border-secondary text-light" id="add-dichvu" name="loai_dich_vu">
+                                    <option value="tietkiem" selected>Tiết Kiệm</option>
+                                    <option value="hoatoc">Hỏa Tốc</option>
+                                    <option value="congkenh">Hàng Cồng Kềnh</option>
+                                    <option value="hanhkhach">Hành Khách</option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label for="add-phi" class="form-label">Phí Cơ Bản (đ) <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control bg-dark border-secondary text-light" id="add-phi" name="phi_co_ban" min="0" required value="15000">
+                            </div>
                         </div>
                         <div class="mb-3">
-                            <label for="add-trang-thai-ban" class="form-label">Trạng Thái</label>
-                            <select class="form-select bg-dark border-secondary text-light" id="add-trang-thai-ban" name="trang_thai">
-                                <option value="empty" selected>Bàn trống</option>
-                                <option value="serving">Đang phục vụ</option>
-                                <option value="reserved">Đã đặt trước</option>
+                            <label for="add-status" class="form-label">Trạng Thái</label>
+                            <select class="form-select bg-dark border-secondary text-light" id="add-status" name="trang_thai">
+                                <option value="active" selected>Hoạt động</option>
+                                <option value="inactive">Tạm dừng</option>
                             </select>
                         </div>
                     </div>
@@ -371,32 +373,56 @@ unset($_SESSION['toast']); // Xóa sau khi đã lấy
         </div>
     </div>
 
-    <!-- Modal: Sửa bàn -->
-    <div class="modal fade" id="editTableModal" tabindex="-1" aria-hidden="true">
+    <!-- Modal: Sửa nhà vận chuyển -->
+    <div class="modal fade" id="editCarrierModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content glass-card">
                 <div class="modal-header border-secondary border-opacity-25">
-                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-pen me-2 text-warning"></i>Chỉnh Sửa Bàn Ăn</h5>
+                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-pen me-2 text-warning"></i>Chỉnh Sửa Nhà Vận Chuyển</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form action="index.php" method="POST">
-                    <input type="hidden" name="action" value="edit_table">
-                    <input type="hidden" id="edit-table-id" name="id">
+                    <input type="hidden" name="action" value="edit_carrier">
+                    <input type="hidden" id="edit-id" name="id">
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="edit-ten-ban" class="form-label">Tên Bàn / Số Bàn <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control bg-dark border-secondary text-light" id="edit-ten-ban" name="ten_ban" required>
+                            <label for="edit-ten" class="form-label">Tên Nhà Xe / Đơn vị <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control bg-dark border-secondary text-light" id="edit-ten" name="ten_nha_xe" required>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label for="edit-sdt" class="form-label">Số điện thoại <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control bg-dark border-secondary text-light" id="edit-sdt" name="so_dien_thoai" required>
+                            </div>
+                            <div class="col-6">
+                                <label for="edit-email" class="form-label">Email <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control bg-dark border-secondary text-light" id="edit-email" name="email" required>
+                            </div>
                         </div>
                         <div class="mb-3">
-                            <label for="edit-so-ghe" class="form-label">Số Ghế <span class="text-danger">*</span></label>
-                            <input type="number" class="form-control bg-dark border-secondary text-light" id="edit-so-ghe" name="so_ghe" min="1" max="50" required>
+                            <label for="edit-diachi" class="form-label">Địa Chỉ Hoạt Động <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control bg-dark border-secondary text-light" id="edit-diachi" name="dia_chi" required>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-6">
+                                <label for="edit-dichvu" class="form-label">Phân Loại Dịch Vụ</label>
+                                <select class="form-select bg-dark border-secondary text-light" id="edit-dichvu" name="loai_dich_vu">
+                                    <option value="tietkiem">Tiết Kiệm</option>
+                                    <option value="hoatoc">Hỏa Tốc</option>
+                                    <option value="congkenh">Hàng Cồng Kềnh</option>
+                                    <option value="hanhkhach">Hành Khách</option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label for="edit-phi" class="form-label">Phí Cơ Bản (đ) <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control bg-dark border-secondary text-light" id="edit-phi" name="phi_co_ban" min="0" required>
+                            </div>
                         </div>
                         <div class="mb-3">
-                            <label for="edit-trang-thai-ban" class="form-label">Trạng Thái</label>
-                            <select class="form-select bg-dark border-secondary text-light" id="edit-trang-thai-ban" name="trang_thai">
-                                <option value="empty">Bàn trống</option>
-                                <option value="serving">Đang phục vụ</option>
-                                <option value="reserved">Đã đặt trước</option>
+                            <label for="edit-status" class="form-label">Trạng Thế</label>
+                            <select class="form-select bg-dark border-secondary text-light" id="edit-status" name="trang_thai">
+                                <option value="active">Hoạt động</option>
+                                <option value="inactive">Tạm dừng</option>
                             </select>
                         </div>
                     </div>
@@ -409,154 +435,22 @@ unset($_SESSION['toast']); // Xóa sau khi đã lấy
         </div>
     </div>
 
-    <!-- Modal: Xóa bàn -->
-    <div class="modal fade" id="deleteTableModal" tabindex="-1" aria-hidden="true">
+    <!-- Modal: Xóa nhà vận chuyển -->
+    <div class="modal fade" id="deleteCarrierModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content glass-card">
                 <div class="modal-header border-secondary border-opacity-25">
-                    <h5 class="modal-title fw-bold text-danger"><i class="fa-solid fa-trash-can me-2"></i>Xác Nhận Xóa Bàn</h5>
+                    <h5 class="modal-title fw-bold text-danger"><i class="fa-solid fa-trash-can me-2"></i>Xác Nhận Xóa Nhà Vận Chuyển</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form action="index.php" method="POST">
-                    <input type="hidden" name="action" value="delete_table">
-                    <input type="hidden" id="delete-table-id" name="id">
-                    <input type="hidden" id="delete-table-name-hidden" name="ten_ban_delete">
-                    <div class="modal-body text-center py-4">
-                        <i class="fa-solid fa-circle-exclamation text-danger fa-4x mb-3 animate-pulse"></i>
-                        <p class="fs-5 mb-0">Bạn có chắc chắn muốn xóa bàn ăn <strong class="text-warning" id="delete-table-name">Bàn --</strong>?</p>
-                        <span class="text-secondary fs-7">Hành động này không thể hoàn tác.</span>
-                    </div>
-                    <div class="modal-footer border-secondary border-opacity-25">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy</button>
-                        <button type="submit" class="btn btn-danger"><i class="fa-solid fa-trash-can me-1"></i>Đồng Ý Xóa</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- ==========================================
-         MODALS CHO MÓN ĂN
-         ========================================== -->
-    <!-- Modal: Thêm món ăn -->
-    <div class="modal fade" id="addMenuModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content glass-card">
-                <div class="modal-header border-secondary border-opacity-25">
-                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-plus me-2 text-primary"></i>Thêm Món Ăn Mới</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form action="index.php" method="POST">
-                    <input type="hidden" name="action" value="add_menu">
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="add-ten-mon" class="form-label">Tên Món Ăn <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control bg-dark border-secondary text-light" id="add-ten-mon" name="ten_mon" required placeholder="Ví dụ: Bún Chả Hà Nội">
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-6">
-                                <label for="add-gia" class="form-label">Đơn Giá (đ) <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control bg-dark border-secondary text-light" id="add-gia" name="gia" min="0" required placeholder="65000">
-                            </div>
-                            <div class="col-6">
-                                <label for="add-phan-loai" class="form-label">Phân Nhóm <span class="text-danger">*</span></label>
-                                <select class="form-select bg-dark border-secondary text-light" id="add-phan-loai" name="phan_loai" required>
-                                    <option value="khaivi">Khai Vị</option>
-                                    <option value="monchinh" selected>Món Chính</option>
-                                    <option value="douong">Đồ Uống</option>
-                                    <option value="trangmieng">Tráng Miệng</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="add-hinh-anh" class="form-label">URL Hình Ảnh</label>
-                            <input type="url" class="form-control bg-dark border-secondary text-light" id="add-hinh-anh" name="hinh_anh" placeholder="Để trống nếu lấy ảnh mặc định">
-                        </div>
-                        <div class="mb-3">
-                            <label for="add-trang-thai-mon" class="form-label">Trạng Thái Món</label>
-                            <select class="form-select bg-dark border-secondary text-light" id="add-trang-thai-mon" name="trang_thai">
-                                <option value="available" selected>Còn món</option>
-                                <option value="out_of_stock">Hết món</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer border-secondary border-opacity-25">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy</button>
-                        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-save me-1"></i>Lưu Lại</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal: Sửa món ăn -->
-    <div class="modal fade" id="editMenuModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content glass-card">
-                <div class="modal-header border-secondary border-opacity-25">
-                    <h5 class="modal-title fw-bold"><i class="fa-solid fa-pen me-2 text-warning"></i>Chỉnh Sửa Món Ăn</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form action="index.php" method="POST">
-                    <input type="hidden" name="action" value="edit_menu">
-                    <input type="hidden" id="edit-menu-id" name="id">
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="edit-ten-mon" class="form-label">Tên Món Ăn <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control bg-dark border-secondary text-light" id="edit-ten-mon" name="ten_mon" required>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-6">
-                                <label for="edit-gia" class="form-label">Đơn Giá (đ) <span class="text-danger">*</span></label>
-                                <input type="number" class="form-control bg-dark border-secondary text-light" id="edit-gia" name="gia" min="0" required>
-                            </div>
-                            <div class="col-6">
-                                <label for="edit-phan-loai" class="form-label">Phân Nhóm <span class="text-danger">*</span></label>
-                                <select class="form-select bg-dark border-secondary text-light" id="edit-phan-loai" name="phan_loai" required>
-                                    <option value="khaivi">Khai Vị</option>
-                                    <option value="monchinh">Món Chính</option>
-                                    <option value="douong">Đồ Uống</option>
-                                    <option value="trangmieng">Tráng Miệng</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="edit-hinh-anh" class="form-label">URL Hình Ảnh</label>
-                            <input type="url" class="form-control bg-dark border-secondary text-light" id="edit-hinh-anh" name="hinh_anh">
-                        </div>
-                        <div class="mb-3">
-                            <label for="edit-trang-thai-mon" class="form-label">Trạng Thái Món</label>
-                            <select class="form-select bg-dark border-secondary text-light" id="edit-trang-thai-mon" name="trang_thai">
-                                <option value="available">Còn món</option>
-                                <option value="out_of_stock">Hết món</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer border-secondary border-opacity-25">
-                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy</button>
-                        <button type="submit" class="btn btn-warning"><i class="fa-solid fa-save me-1"></i>Cập Nhật</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal: Xóa món ăn -->
-    <div class="modal fade" id="deleteMenuModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content glass-card">
-                <div class="modal-header border-secondary border-opacity-25">
-                    <h5 class="modal-title fw-bold text-danger"><i class="fa-solid fa-trash-can me-2"></i>Xác Nhận Xóa Món Ăn</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form action="index.php" method="POST">
-                    <input type="hidden" name="action" value="delete_menu">
-                    <input type="hidden" id="delete-menu-id" name="id">
-                    <input type="hidden" id="delete-menu-name-hidden" name="ten_mon_delete">
+                    <input type="hidden" name="action" value="delete_carrier">
+                    <input type="hidden" id="delete-id" name="id">
+                    <input type="hidden" id="delete-name-hidden" name="ten_nha_xe_delete">
                     <div class="modal-body text-center py-4">
                         <i class="fa-solid fa-circle-exclamation text-danger fa-4x mb-3"></i>
-                        <p class="fs-5 mb-0">Bạn có chắc chắn muốn xóa món <strong class="text-warning" id="delete-menu-name">Món --</strong> khỏi thực đơn?</p>
-                        <span class="text-secondary fs-7">Hành động này không thể hoàn tác.</span>
+                        <p class="fs-5 mb-0">Bạn có chắc chắn muốn xóa nhà vận chuyển <strong class="text-warning" id="delete-name">Nhà xe --</strong>?</p>
+                        <span class="text-secondary fs-7">Hành động này không thể hoàn tác và sẽ xóa hoàn toàn nhà xe khỏi hệ thống.</span>
                     </div>
                     <div class="modal-footer border-secondary border-opacity-25">
                         <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy</button>
@@ -570,7 +464,7 @@ unset($_SESSION['toast']); // Xóa sau khi đã lấy
     <!-- Live Toast Container -->
     <div class="toast-container position-fixed bottom-0 end-0 p-3">
         <?php if ($toast): ?>
-            <div class="toast show bg-<?php echo $toast['type'] === 'danger' ? 'danger' : 'success'; ?> border-0 text-white" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="4000">
+            <div class="toast show bg-<?php echo $toast['type'] === 'danger' ? 'danger' : 'success'; ?> border-0 text-white" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="d-flex">
                     <div class="toast-body d-flex align-items-center">
                         <i class="fa-solid <?php echo $toast['type'] === 'danger' ? 'fa-circle-xmark' : 'fa-circle-check'; ?> me-2 fs-5"></i>
@@ -585,51 +479,34 @@ unset($_SESSION['toast']); // Xóa sau khi đã lấy
     <!-- Bootstrap 5 Bundle JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
-    <!-- Custom scripts to handle Modal inputs population -->
+    <!-- Custom script to handle Edit/Delete modals inputs population -->
     <script>
-        // --- POPULATE TABLE EDIT & DELETE MODALS ---
-        document.querySelectorAll('.edit-table-btn').forEach(btn => {
+        // Populate edit modal fields
+        document.querySelectorAll('.edit-carrier-btn').forEach(btn => {
             btn.addEventListener('click', function() {
-                document.getElementById('edit-table-id').value = this.getAttribute('data-id');
-                document.getElementById('edit-ten-ban').value = this.getAttribute('data-name');
-                document.getElementById('edit-so-ghe').value = this.getAttribute('data-seats');
-                document.getElementById('edit-trang-thai-ban').value = this.getAttribute('data-status');
+                document.getElementById('edit-id').value = this.getAttribute('data-id');
+                document.getElementById('edit-ten').value = this.getAttribute('data-name');
+                document.getElementById('edit-sdt').value = this.getAttribute('data-phone');
+                document.getElementById('edit-email').value = this.getAttribute('data-email');
+                document.getElementById('edit-diachi').value = this.getAttribute('data-address');
+                document.getElementById('edit-dichvu').value = this.getAttribute('data-service');
+                document.getElementById('edit-phi').value = this.getAttribute('data-fee');
+                document.getElementById('edit-status').value = this.getAttribute('data-status');
             });
         });
 
-        document.querySelectorAll('.delete-table-btn').forEach(btn => {
+        // Populate delete modal fields
+        document.querySelectorAll('.delete-carrier-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const id = this.getAttribute('data-id');
                 const name = this.getAttribute('data-name');
-                document.getElementById('delete-table-id').value = id;
-                document.getElementById('delete-table-name').textContent = name;
-                document.getElementById('delete-table-name-hidden').value = name;
+                document.getElementById('delete-id').value = id;
+                document.getElementById('delete-name').textContent = name;
+                document.getElementById('delete-name-hidden').value = name;
             });
         });
 
-        // --- POPULATE MENU EDIT & DELETE MODALS ---
-        document.querySelectorAll('.edit-menu-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.getElementById('edit-menu-id').value = this.getAttribute('data-id');
-                document.getElementById('edit-ten-mon').value = this.getAttribute('data-name');
-                document.getElementById('edit-gia').value = this.getAttribute('data-price');
-                document.getElementById('edit-phan-loai').value = this.getAttribute('data-category');
-                document.getElementById('edit-hinh-anh').value = this.getAttribute('data-image');
-                document.getElementById('edit-trang-thai-mon').value = this.getAttribute('data-status');
-            });
-        });
-
-        document.querySelectorAll('.delete-menu-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const id = this.getAttribute('data-id');
-                const name = this.getAttribute('data-name');
-                document.getElementById('delete-menu-id').value = id;
-                document.getElementById('delete-menu-name').textContent = name;
-                document.getElementById('delete-menu-name-hidden').value = name;
-            });
-        });
-        
-        // Auto hide toast after 4s
+        // Auto hide toast alerts after 4s
         const toastEl = document.querySelector('.toast');
         if (toastEl) {
             setTimeout(() => {
