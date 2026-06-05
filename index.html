@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GastroFlow - Hệ Thống Quản Lý Nhà Hàng Cao Cấp</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main Style CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-brand">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-fire-burner"></i>
+                </div>
+                <div class="brand-text">
+                    <h1>GastroFlow</h1>
+                    <span>Bistro & POS</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-item active" data-tab="dashboard">
+                        <i class="fa-solid fa-chart-pie"></i>
+                        <span>Tổng Quan</span>
+                    </li>
+                    <li class="nav-item" data-tab="tables">
+                        <i class="fa-solid fa-table-cells-large"></i>
+                        <span>Sơ Đồ Bàn</span>
+                        <span class="badge badge-info" id="active-tables-badge">0/12</span>
+                    </li>
+                    <li class="nav-item" data-tab="pos">
+                        <i class="fa-solid fa-cash-register"></i>
+                        <span>Gọi Món (POS)</span>
+                    </li>
+                    <li class="nav-item" data-tab="orders">
+                        <i class="fa-solid fa-bell"></i>
+                        <span>Đơn Hàng Live</span>
+                        <span class="badge badge-warning pulse" id="pending-orders-badge">0</span>
+                    </li>
+                    <li class="nav-item" data-tab="menu">
+                        <i class="fa-solid fa-utensils"></i>
+                        <span>Thực Đơn</span>
+                    </li>
+                    <li class="nav-item" data-tab="history">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        <span>Lịch Sử Hóa Đơn</span>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="theme-toggle" id="theme-toggle-btn" title="Chuyển chế độ Sáng/Tối">
+                    <i class="fa-solid fa-sun light-icon"></i>
+                    <i class="fa-solid fa-moon dark-icon"></i>
+                    <span class="theme-text">Chế độ tối</span>
+                </div>
+                <div class="user-profile">
+                    <img src="https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=150" alt="Chef Avatar" class="avatar">
+                    <div class="user-info">
+                        <h4>Nguyễn Huy Hoàng</h4>
+                        <span>Quản lý</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header Bar -->
+            <header class="main-header">
+                <div class="header-left">
+                    <h2 id="current-tab-title">Tổng Quan Hệ Thống</h2>
+                    <p class="current-date" id="live-clock">Đang tải thời gian...</p>
+                </div>
+                <div class="header-right">
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="global-search" placeholder="Tìm kiếm bàn, đơn hàng, món...">
+                    </div>
+                    <div class="quick-stats-header">
+                        <div class="header-stat">
+                            <span class="label">Doanh thu hôm nay</span>
+                            <span class="value text-success" id="header-today-revenue">0 đ</span>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Content Container -->
+            <div class="content-body">
+                
+                <!-- TAB 1: DASHBOARD -->
+                <section id="tab-dashboard" class="tab-pane active">
+                    <!-- Stats Grid -->
+                    <div class="stats-grid">
+                        <div class="stat-card glass-card">
+                            <div class="stat-icon bg-soft-success text-success">
+                                <i class="fa-solid fa-wallet"></i>
+                            </div>
+                            <div class="stat-info">
+                                <span class="label">Doanh Thu Ngày</span>
+                                <h3 id="stat-revenue">0 đ</h3>
+                                <span class="trend text-success"><i class="fa-solid fa-arrow-up"></i> Hôm nay</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card glass-card">
+                            <div class="stat-icon bg-soft-info text-info">
+                                <i class="fa-solid fa-chair"></i>
+                            </div>
+                            <div class="stat-info">
+                                <span class="label">Bàn Đang Dùng</span>
+                                <h3 id="stat-occupied-tables">0 / 12</h3>
+                                <div class="progress-bar-container">
+                                    <div class="progress-bar" id="stat-occupied-progress" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="stat-card glass-card">
+                            <div class="stat-icon bg-soft-warning text-warning">
+                                <i class="fa-solid fa-clock-rotate-left"></i>
+                            </div>
+                            <div class="stat-info">
+                                <span class="label">Đơn Hàng Mới</span>
+                                <h3 id="stat-active-orders">0 Đơn</h3>
+                                <span class="trend text-warning"><i class="fa-solid fa-circle-notch fa-spin"></i> Chờ chế biến</span>
+                            </div>
+                        </div>
+
+                        <div class="stat-card glass-card">
+                            <div class="stat-icon bg-soft-danger text-danger">
+                                <i class="fa-solid fa-fire"></i>
+                            </div>
+                            <div class="stat-info">
+                                <span class="label">Đã Phục Vụ</span>
+                                <h3 id="stat-served-count">0 Đĩa</h3>
+                                <span class="trend text-danger"><i class="fa-solid fa-check-double"></i> Đã hoàn thành</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Dashboard Layout Section -->
+                    <div class="dashboard-layout">
+                        <!-- Left Layout: Quick Table View & Popular -->
+                        <div class="dashboard-left">
+                            <div class="glass-card section-card">
+                                <div class="card-header">
+                                    <h3>Trạng Thái Bàn Nhanh</h3>
+                                    <button class="btn btn-sm btn-text" onclick="switchTab('tables')">Xem sơ đồ bàn <i class="fa-solid fa-arrow-right"></i></button>
+                                </div>
+                                <div class="mini-table-grid" id="mini-table-grid">
+                                    <!-- Rendered dynamically -->
+                                </div>
+                            </div>
+
+                            <div class="glass-card section-card margin-top">
+                                <div class="card-header">
+                                    <h3>Thống Kê Món Ăn Bán Chạy</h3>
+                                </div>
+                                <div class="popular-items-list" id="popular-items-list">
+                                    <!-- Rendered dynamically -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Layout: Recent activity log -->
+                        <div class="dashboard-right">
+                            <div class="glass-card section-card height-full">
+                                <div class="card-header">
+                                    <h3>Lịch Sử Hóa Đơn Hôm Nay</h3>
+                                    <button class="btn btn-sm btn-text" onclick="switchTab('history')">Tất cả <i class="fa-solid fa-arrow-right"></i></button>
+                                </div>
+                                <div class="recent-invoices" id="recent-invoices-list">
+                                    <!-- Rendered dynamically -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB 2: TABLES -->
+                <section id="tab-tables" class="tab-pane">
+                    <div class="filter-bar">
+                        <div class="filter-tabs">
+                            <button class="filter-btn active" data-filter="all">Tất cả Bàn (<span id="count-all-tables">0</span>)</button>
+                            <button class="filter-btn" data-filter="empty">Bàn Trống (<span id="count-empty-tables">0</span>)</button>
+                            <button class="filter-btn" data-filter="serving">Đang Phục Vụ (<span id="count-serving-tables">0</span>)</button>
+                            <button class="filter-btn" data-filter="reserved">Đã Đặt Trước (<span id="count-reserved-tables">0</span>)</button>
+                        </div>
+                        <button class="btn btn-primary" onclick="openAddTableModal()"><i class="fa-solid fa-plus"></i> Thêm Bàn Mới</button>
+                    </div>
+
+                    <div class="tables-grid" id="tables-grid">
+                        <!-- Rendered dynamically -->
+                    </div>
+                </section>
+
+                <!-- TAB 3: POS -->
+                <section id="tab-pos" class="tab-pane">
+                    <div class="pos-layout">
+                        <!-- POS Left: Menu Items -->
+                        <div class="pos-menu-section glass-card">
+                            <div class="pos-menu-header">
+                                <div class="category-tabs" id="pos-category-tabs">
+                                    <button class="category-btn active" data-category="all">Tất cả</button>
+                                    <button class="category-btn" data-category="khaivi">Khai Vị</button>
+                                    <button class="category-btn" data-category="monchinh">Món Chính</button>
+                                    <button class="category-btn" data-category="douong">Đồ Uống</button>
+                                    <button class="category-btn" data-category="trangmieng">Tráng Miệng</button>
+                                </div>
+                                <div class="pos-search-box">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                    <input type="text" id="pos-food-search" placeholder="Tìm món ăn nhanh...">
+                                </div>
+                            </div>
+                            <div class="pos-menu-grid" id="pos-menu-grid">
+                                <!-- Rendered dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- POS Right: Order Details -->
+                        <div class="pos-cart-section glass-card">
+                            <div class="cart-header">
+                                <h3>Hóa Đơn & Đặt Món</h3>
+                                <div class="table-selector-wrap">
+                                    <label for="cart-table-select"><i class="fa-solid fa-chair text-primary"></i></label>
+                                    <select id="cart-table-select">
+                                        <!-- Rendered dynamically -->
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Cart Items List -->
+                            <div class="cart-items-wrapper" id="cart-items-list">
+                                <!-- Placeholder when cart is empty -->
+                                <div class="cart-empty-state">
+                                    <i class="fa-solid fa-basket-shopping"></i>
+                                    <p>Chưa có món nào được chọn</p>
+                                    <span>Vui lòng chọn bàn và nhấp chọn món ăn trong thực đơn để thêm.</span>
+                                </div>
+                            </div>
+
+                            <!-- Cart Footer Totals -->
+                            <div class="cart-footer">
+                                <div class="totals-row">
+                                    <span>Tạm tính:</span>
+                                    <span id="cart-subtotal">0 đ</span>
+                                </div>
+                                <div class="totals-row">
+                                    <span>Thuế VAT (10%):</span>
+                                    <span id="cart-tax">0 đ</span>
+                                </div>
+                                <div class="totals-row total-amount">
+                                    <span>Tổng cộng:</span>
+                                    <span id="cart-total">0 đ</span>
+                                </div>
+
+                                <div class="cart-actions">
+                                    <button class="btn btn-outline-danger" id="btn-clear-cart" onclick="clearCart()"><i class="fa-solid fa-trash-can"></i> Hủy</button>
+                                    <button class="btn btn-primary btn-block flex-grow" id="btn-submit-kitchen" onclick="submitCartToKitchen()"><i class="fa-solid fa-kitchen-set"></i> Gửi Xuống Bếp</button>
+                                </div>
+                                <button class="btn btn-success btn-block margin-top-sm" id="btn-quick-pay" onclick="triggerCheckout()"><i class="fa-solid fa-circle-check"></i> Thanh Toán Ngay</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB 4: ORDERS (LIVE KITCHEN) -->
+                <section id="tab-orders" class="tab-pane">
+                    <div class="kitchen-layout">
+                        <!-- Column 1: Pending cooking -->
+                        <div class="kitchen-column glass-card">
+                            <div class="kitchen-column-header border-orange">
+                                <h3><span class="dot bg-orange animate-pulse"></span> Chờ Chế Biến</h3>
+                                <span class="badge bg-orange" id="count-pending-orders">0</span>
+                            </div>
+                            <div class="kitchen-order-list" id="kitchen-pending-orders">
+                                <!-- Rendered dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- Column 2: Cooking -->
+                        <div class="kitchen-column glass-card">
+                            <div class="kitchen-column-header border-blue">
+                                <h3><span class="dot bg-blue animate-spin-slow"></span> Đang Nấu</h3>
+                                <span class="badge bg-blue" id="count-preparing-orders">0</span>
+                            </div>
+                            <div class="kitchen-order-list" id="kitchen-preparing-orders">
+                                <!-- Rendered dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- Column 3: Ready to serve -->
+                        <div class="kitchen-column glass-card">
+                            <div class="kitchen-column-header border-green">
+                                <h3><span class="dot bg-green"></span> Đã Xong / Chờ Phục Vụ</h3>
+                                <span class="badge bg-green" id="count-ready-orders">0</span>
+                            </div>
+                            <div class="kitchen-order-list" id="kitchen-ready-orders">
+                                <!-- Rendered dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- Column 4: Served / Completed -->
+                        <div class="kitchen-column glass-card">
+                            <div class="kitchen-column-header border-purple">
+                                <h3><span class="dot bg-purple"></span> Đã Phục Vụ / Chờ Thanh Toán</h3>
+                                <span class="badge bg-purple" id="count-served-orders">0</span>
+                            </div>
+                            <div class="kitchen-order-list" id="kitchen-served-orders">
+                                <!-- Rendered dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TAB 5: MENU SETTINGS -->
+                <section id="tab-menu" class="tab-pane">
+                    <div class="menu-control-bar">
+                        <div class="search-box">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="menu-settings-search" placeholder="Tìm kiếm món trong thực đơn...">
+                        </div>
+                        <button class="btn btn-primary" onclick="openMenuModal()"><i class="fa-solid fa-plus"></i> Thêm Món Mới</button>
+                    </div>
+
+                    <div class="menu-items-table-wrapper glass-card">
+                        <table class="menu-items-table" id="menu-items-table">
+                            <thead>
+                                <tr>
+                                    <th>Hình ảnh</th>
+                                    <th>Tên món</th>
+                                    <th>Phân loại</th>
+                                    <th>Đơn giá</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="menu-settings-tbody">
+                                <!-- Rendered dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- TAB 6: INVOICES HISTORY -->
+                <section id="tab-history" class="tab-pane">
+                    <div class="history-filter-bar">
+                        <div class="date-filters">
+                            <div class="input-group">
+                                <label for="filter-date-from">Từ ngày:</label>
+                                <input type="date" id="filter-date-from">
+                            </div>
+                            <div class="input-group">
+                                <label for="filter-date-to">Đến ngày:</label>
+                                <input type="date" id="filter-date-to">
+                            </div>
+                            <button class="btn btn-outline" onclick="filterInvoices()"><i class="fa-solid fa-filter"></i> Lọc</button>
+                            <button class="btn btn-text" onclick="resetInvoiceFilters()">Đặt lại</button>
+                        </div>
+                        <div class="history-summary glass-card">
+                            <span class="label">Tổng doanh thu kỳ lọc:</span>
+                            <strong id="filtered-total-revenue">0 đ</strong>
+                        </div>
+                    </div>
+
+                    <div class="invoices-table-wrapper glass-card">
+                        <table class="invoices-table" id="invoices-table">
+                            <thead>
+                                <tr>
+                                    <th>Mã Hóa Đơn</th>
+                                    <th>Thời Gian</th>
+                                    <th>Bàn</th>
+                                    <th>Món Đã Gọi</th>
+                                    <th>Tổng Thanh Toán</th>
+                                    <th>PT Thanh Toán</th>
+                                    <th>Hành Động</th>
+                                </tr>
+                            </thead>
+                            <tbody id="invoices-tbody">
+                                <!-- Rendered dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL: CHECKOUT / BILL PRINT PREVIEW -->
+    <div class="modal" id="checkout-modal">
+        <div class="modal-content glass-card width-receipt">
+            <div class="receipt-header-logo">
+                <i class="fa-solid fa-fire-burner"></i>
+                <h2>GASTROFLOW BISTRO</h2>
+                <p>Số 1 Đại Cồ Việt, Hai Bà Trưng, Hà Nội</p>
+                <p>Hotline: 0987.654.321</p>
+            </div>
+            
+            <div class="receipt-divider"></div>
+
+            <div class="receipt-meta">
+                <div class="meta-row">
+                    <span>Mã hóa đơn:</span>
+                    <strong id="receipt-invoice-id">#INV-0000</strong>
+                </div>
+                <div class="meta-row">
+                    <span>Thời gian:</span>
+                    <span id="receipt-time">--:-- --/--/----</span>
+                </div>
+                <div class="meta-row">
+                    <span>Bàn ăn:</span>
+                    <strong id="receipt-table">Bàn --</strong>
+                </div>
+                <div class="meta-row">
+                    <span>Thu ngân:</span>
+                    <span>Nguyễn Huy Hoàng</span>
+                </div>
+            </div>
+
+            <div class="receipt-divider"></div>
+
+            <!-- Receipt Items -->
+            <div class="receipt-items-list" id="receipt-items-list">
+                <!-- Rendered dynamically -->
+            </div>
+
+            <div class="receipt-divider"></div>
+
+            <div class="receipt-summary">
+                <div class="summary-row">
+                    <span>Tạm tính:</span>
+                    <span id="receipt-subtotal">0 đ</span>
+                </div>
+                <div class="summary-row">
+                    <span>VAT (10%):</span>
+                    <span id="receipt-tax">0 đ</span>
+                </div>
+                <div class="summary-row total-row">
+                    <span>TỔNG CỘNG:</span>
+                    <strong id="receipt-total">0 đ</strong>
+                </div>
+            </div>
+
+            <div class="receipt-divider"></div>
+            
+            <div class="payment-method-selector">
+                <p class="select-label">Phương thức thanh toán:</p>
+                <div class="method-options">
+                    <label class="method-option active" data-method="Cash">
+                        <input type="radio" name="pay-method" value="Cash" checked>
+                        <i class="fa-solid fa-money-bill-wave"></i> Tiền mặt
+                    </label>
+                    <label class="method-option" data-method="Card">
+                        <input type="radio" name="pay-method" value="Card">
+                        <i class="fa-solid fa-credit-card"></i> Quẹt thẻ
+                    </label>
+                    <label class="method-option" data-method="QR">
+                        <input type="radio" name="pay-method" value="QR">
+                        <i class="fa-solid fa-qrcode"></i> Chuyển khoản QR
+                    </label>
+                </div>
+                
+                <div class="qr-mockup" id="qr-mockup">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=GASTROFLOW-BISTRO-PAYMENT" alt="QR Code Payment">
+                    <p>Quét mã QR để thanh toán qua Ngân Hàng/Ví Điện Tử</p>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="closeCheckoutModal()">Đóng</button>
+                <button class="btn btn-primary" onclick="completePaymentProcess()"><i class="fa-solid fa-print"></i> Xác Nhận & In Hóa Đơn</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD / EDIT MENU ITEM -->
+    <div class="modal" id="menu-item-modal">
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <h3 id="menu-modal-title">Thêm Món Mới Vào Thực Đơn</h3>
+                <button class="close-btn" onclick="closeMenuModal()">&times;</button>
+            </div>
+            <form id="menu-item-form" onsubmit="saveMenuItem(event)">
+                <input type="hidden" id="menu-item-id">
+                
+                <div class="form-group">
+                    <label for="menu-item-name">Tên món ăn <span class="required">*</span></label>
+                    <input type="text" id="menu-item-name" required placeholder="Ví dụ: Bò Bít Tết Sốt Tiêu Đen">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group flex-1">
+                        <label for="menu-item-price">Đơn giá (đ) <span class="required">*</span></label>
+                        <input type="number" id="menu-item-price" min="0" required placeholder="Ví dụ: 185000">
+                    </div>
+                    <div class="form-group flex-1">
+                        <label for="menu-item-category">Phân nhóm món <span class="required">*</span></label>
+                        <select id="menu-item-category" required>
+                            <option value="khaivi">Khai Vị</option>
+                            <option value="monchinh" selected>Món Chính</option>
+                            <option value="douong">Đồ Uống</option>
+                            <option value="trangmieng">Tráng Miệng</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="menu-item-image">URL Ảnh Món Ăn (Để trống sẽ tự động lấy ảnh ngẫu nhiên)</label>
+                    <input type="url" id="menu-item-image" placeholder="https://example.com/food.jpg">
+                </div>
+
+                <div class="form-group">
+                    <label for="menu-item-status">Trạng thái món</label>
+                    <select id="menu-item-status">
+                        <option value="available" selected>Còn món</option>
+                        <option value="out_of_stock">Hết món</option>
+                    </select>
+                </div>
+
+                <div class="modal-footer no-padding-bottom">
+                    <button type="button" class="btn btn-outline" onclick="closeMenuModal()">Hủy</button>
+                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-save"></i> Lưu Lại</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: ADD NEW TABLE -->
+    <div class="modal" id="table-modal">
+        <div class="modal-content glass-card">
+            <div class="modal-header">
+                <h3>Thêm Bàn Mới</h3>
+                <button class="close-btn" onclick="closeTableModal()">&times;</button>
+            </div>
+            <form id="table-form" onsubmit="saveNewTable(event)">
+                <div class="form-group">
+                    <label for="new-table-name">Tên Bàn / Số Bàn <span class="required">*</span></label>
+                    <input type="text" id="new-table-name" required placeholder="Ví dụ: Bàn 13">
+                </div>
+                
+                <div class="form-group">
+                    <label for="new-table-seats">Số Ghế <span class="required">*</span></label>
+                    <input type="number" id="new-table-seats" min="1" max="20" value="4" required>
+                </div>
+
+                <div class="modal-footer no-padding-bottom">
+                    <button type="button" class="btn btn-outline" onclick="closeTableModal()">Hủy</button>
+                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-save"></i> Thêm Bàn</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Live Toast Notification System -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Main JavaScript Logic -->
+    <script src="app.js"></script>
+</body>
+</html>
