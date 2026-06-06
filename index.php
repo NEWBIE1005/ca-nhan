@@ -139,9 +139,9 @@ unset($_SESSION['toast']);
         <div class="container">
             <span class="navbar-brand fs-4"><i class="fa-solid fa-truck-fast me-2 text-primary"></i>GastroFlow Logistics</span>
             <div class="d-flex align-items-center">
-                <span class="badge bg-primary bg-opacity-10 text-primary py-2 px-3 border border-primary border-opacity-25 rounded-pill">
-                    <i class="fa-solid fa-database me-1"></i> XAMPP MySQL Cổng 3307 Connected
-                </span>
+                <a href="http://localhost/phpmyadmin/" target="_blank" class="btn btn-sm btn-outline-primary">
+                    <i class="fa-solid fa-database me-1"></i> Mở phpMyAdmin
+                </a>
             </div>
         </div>
     </nav>
