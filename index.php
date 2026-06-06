@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $so_dien_thoai = trim($_POST['so_dien_thoai']);
                 $email = trim($_POST['email']);
                 $dia_chi = trim($_POST['dia_chi']);
-                $loai_dich_vu = $_POST['loai_dich_vu'];
+                $loai_dich_vu = isset($_POST['loai_dich_vu']) ? $_POST['loai_dich_vu'] : 'tietkiem';
                 $phi_co_ban = intval($_POST['phi_co_ban']);
                 $trang_thai = $_POST['trang_thai'];
                 
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $so_dien_thoai = trim($_POST['so_dien_thoai']);
                 $email = trim($_POST['email']);
                 $dia_chi = trim($_POST['dia_chi']);
-                $loai_dich_vu = $_POST['loai_dich_vu'];
+                $loai_dich_vu = isset($_POST['loai_dich_vu']) ? $_POST['loai_dich_vu'] : 'tietkiem';
                 $phi_co_ban = intval($_POST['phi_co_ban']);
                 $trang_thai = $_POST['trang_thai'];
                 
@@ -60,8 +60,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // --- XỬ LÝ TÌM KIẾM ---
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 if ($search !== '') {
-    $stmt = $conn->prepare("SELECT * FROM nha_van_chuyen WHERE ten_nha_xe LIKE ? OR dia_chi LIKE ? OR loai_dich_vu LIKE ? ORDER BY id DESC");
-    $stmt->execute(["%$search%", "%$search%", "%$search%"]);
+    $stmt = $conn->prepare("SELECT * FROM nha_van_chuyen WHERE ten_nha_xe LIKE ? OR dia_chi LIKE ? ORDER BY id DESC");
+    $stmt->execute(["%$search%", "%$search%"]);
     $carriers = $stmt->fetchAll();
 } else {
     $carriers = $conn->query("SELECT * FROM nha_van_chuyen ORDER BY id DESC")->fetchAll();
@@ -216,7 +216,7 @@ unset($_SESSION['toast']);
                 <form action="index.php" method="GET" class="d-flex gap-2">
                     <div class="input-group">
                         <span class="input-group-text bg-dark border-secondary text-secondary"><i class="fa-solid fa-magnifying-glass"></i></span>
-                        <input type="text" name="search" class="form-control bg-dark border-secondary text-light" placeholder="Tìm kiếm nhà vận chuyển, loại dịch vụ, địa chỉ..." value="<?php echo htmlspecialchars($search); ?>">
+                        <input type="text" name="search" class="form-control bg-dark border-secondary text-light" placeholder="Tìm kiếm nhà vận chuyển, địa chỉ..." value="<?php echo htmlspecialchars($search); ?>">
                     </div>
                     <button type="submit" class="btn btn-outline-primary px-3"><i class="fa-solid fa-filter"></i> Lọc</button>
                     <?php if ($search !== ''): ?>
@@ -240,7 +240,6 @@ unset($_SESSION['toast']);
                             <th>Nhà xe / Tên vận chuyển</th>
                             <th>Thông tin liên hệ</th>
                             <th>Địa chỉ hoạt động</th>
-                            <th>Dịch vụ</th>
                             <th>Phí cơ bản</th>
                             <th>Trạng Thái</th>
                             <th class="text-end">Thao Tác</th>
@@ -249,7 +248,7 @@ unset($_SESSION['toast']);
                     <tbody>
                         <?php if (empty($carriers)): ?>
                             <tr>
-                                <td colspan="7" class="text-center py-5 text-muted">
+                                <td colspan="6" class="text-center py-5 text-muted">
                                     <i class="fa-solid fa-truck-moving fa-3x mb-3 text-secondary opacity-25"></i>
                                     <p class="mb-0">Không tìm thấy nhà vận chuyển nào phù hợp.</p>
                                 </td>
@@ -268,16 +267,6 @@ unset($_SESSION['toast']);
                                     <td style="max-width: 250px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;" title="<?php echo htmlspecialchars($carrier['dia_chi']); ?>">
                                         <?php echo htmlspecialchars($carrier['dia_chi']); ?>
                                     </td>
-                                    <td>
-                                        <?php 
-                                        $service = $carrier['loai_dich_vu'];
-                                        if ($service === 'hoatoc') echo '<span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25">Hỏa Tốc</span>';
-                                        elseif ($service === 'tietkiem') echo '<span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">Tiết Kiệm</span>';
-                                        elseif ($service === 'congkenh') echo '<span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25">Hàng Cồng Kềnh</span>';
-                                        elseif ($service === 'hanhkhach') echo '<span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25">Hành Khách</span>';
-                                        else echo '<span class="badge bg-secondary">'.htmlspecialchars($service).'</span>';
-                                        ?>
-                                    </td>
                                     <td class="text-primary fw-semibold"><?php echo number_format($carrier['phi_co_ban'], 0, ',', '.'); ?> đ</td>
                                     <td>
                                         <?php if ($carrier['trang_thai'] === 'active'): ?>
@@ -295,7 +284,6 @@ unset($_SESSION['toast']);
                                                 data-phone="<?php echo htmlspecialchars($carrier['so_dien_thoai']); ?>"
                                                 data-email="<?php echo htmlspecialchars($carrier['email']); ?>"
                                                 data-address="<?php echo htmlspecialchars($carrier['dia_chi']); ?>"
-                                                data-service="<?php echo htmlspecialchars($carrier['loai_dich_vu']); ?>"
                                                 data-fee="<?php echo $carrier['phi_co_ban']; ?>"
                                                 data-status="<?php echo htmlspecialchars($carrier['trang_thai']); ?>">
                                             <i class="fa-solid fa-pen"></i> Sửa
@@ -351,16 +339,8 @@ unset($_SESSION['toast']);
                             <input type="text" class="form-control bg-dark border-secondary text-light" id="add-diachi" name="dia_chi" required placeholder="Địa chỉ trụ sở chính">
                         </div>
                         <div class="row mb-3">
-                            <div class="col-6">
-                                <label for="add-dichvu" class="form-label">Phân Loại Dịch Vụ</label>
-                                <select class="form-select bg-dark border-secondary text-light" id="add-dichvu" name="loai_dich_vu">
-                                    <option value="tietkiem" selected>Tiết Kiệm</option>
-                                    <option value="hoatoc">Hỏa Tốc</option>
-                                    <option value="congkenh">Hàng Cồng Kềnh</option>
-                                    <option value="hanhkhach">Hành Khách</option>
-                                </select>
-                            </div>
-                            <div class="col-6">
+                            <div class="col-12">
+                                <input type="hidden" name="loai_dich_vu" value="tietkiem">
                                 <label for="add-phi" class="form-label">Phí Cơ Bản (đ) <span class="text-danger">*</span></label>
                                 <input type="number" class="form-control bg-dark border-secondary text-light" id="add-phi" name="phi_co_ban" min="0" required value="15000">
                             </div>
@@ -413,16 +393,8 @@ unset($_SESSION['toast']);
                             <input type="text" class="form-control bg-dark border-secondary text-light" id="edit-diachi" name="dia_chi" required>
                         </div>
                         <div class="row mb-3">
-                            <div class="col-6">
-                                <label for="edit-dichvu" class="form-label">Phân Loại Dịch Vụ</label>
-                                <select class="form-select bg-dark border-secondary text-light" id="edit-dichvu" name="loai_dich_vu">
-                                    <option value="tietkiem">Tiết Kiệm</option>
-                                    <option value="hoatoc">Hỏa Tốc</option>
-                                    <option value="congkenh">Hàng Cồng Kềnh</option>
-                                    <option value="hanhkhach">Hành Khách</option>
-                                </select>
-                            </div>
-                            <div class="col-6">
+                            <div class="col-12">
+                                <input type="hidden" id="edit-dichvu" name="loai_dich_vu" value="tietkiem">
                                 <label for="edit-phi" class="form-label">Phí Cơ Bản (đ) <span class="text-danger">*</span></label>
                                 <input type="number" class="form-control bg-dark border-secondary text-light" id="edit-phi" name="phi_co_ban" min="0" required>
                             </div>
@@ -498,7 +470,6 @@ unset($_SESSION['toast']);
                 document.getElementById('edit-sdt').value = this.getAttribute('data-phone');
                 document.getElementById('edit-email').value = this.getAttribute('data-email');
                 document.getElementById('edit-diachi').value = this.getAttribute('data-address');
-                document.getElementById('edit-dichvu').value = this.getAttribute('data-service');
                 document.getElementById('edit-phi').value = this.getAttribute('data-fee');
                 document.getElementById('edit-status').value = this.getAttribute('data-status');
             });

@@ -1,6 +1,6 @@
 # GastroFlow Logistics - Hệ Thống Quản Lý Nhà Vận Chuyển (Bootstrap & PHP & MySQL)
 
-GastroFlow Logistics là ứng dụng web quản lý danh sách và dịch vụ của các đơn vị nhà vận chuyển (shipping carriers, nhà xe). Dự án được thiết kế đẹp mắt với giao diện **Bootstrap 5 (Dark theme)** kết hợp kết nối cơ sở dữ liệu **MySQL trên XAMPP (qua cổng 3307)** và có đầy đủ tính năng CRUD (Thêm, Sửa, Xóa).
+GastroFlow Logistics là ứng dụng web quản lý danh sách các đơn vị nhà vận chuyển (shipping carriers, nhà xe). Dự án được thiết kế đẹp mắt với giao diện **Bootstrap 5 (Light theme)** kết hợp kết nối cơ sở dữ liệu **MySQL trên XAMPP (qua cổng 3307)** và có đầy đủ tính năng CRUD (Thêm, Sửa, Xóa).
 
 ---
 
@@ -13,10 +13,10 @@ GastroFlow Logistics là ứng dụng web quản lý danh sách và dịch vụ 
    - Thống kê các đơn vị đang tạm dừng hoạt động.
 
 2. **Tìm kiếm & Bộ lọc**:
-   - Thanh tìm kiếm thông minh hỗ trợ lọc nhà xe theo Tên nhà vận chuyển, Địa chỉ hoặc Loại hình dịch vụ.
+   - Thanh tìm kiếm thông minh hỗ trợ lọc nhà xe theo Tên nhà vận chuyển hoặc Địa chỉ.
 
 3. **CRUD Nhà Vận Chuyển**:
-   - **Thêm mới**: Form modal nhập Tên nhà xe, Số điện thoại, Email, Địa chỉ, Chọn dịch vụ (Tiết kiệm, Hỏa tốc, Cồng kềnh, Hành khách), Phí cơ bản và Trạng thái.
+   - **Thêm mới**: Form modal nhập Tên nhà xe, Số điện thoại, Email, Địa chỉ, Phí cơ bản và Trạng thái.
    - **Chỉnh sửa**: Cập nhật thông tin chi tiết của nhà xe bất kỳ bằng form modal.
    - **Xóa**: Hủy đăng ký đơn vị vận chuyển khỏi hệ thống thông qua hộp thoại xác nhận.
 
@@ -30,8 +30,9 @@ GastroFlow Logistics là ứng dụng web quản lý danh sách và dịch vụ 
    - Bật **Apache** và **MySQL** trên **XAMPP Control Panel**.
    - Chú ý: Cấu hình cổng MySQL trên máy của bạn đang chạy ở cổng **3307**.
 3. **Import database**:
+   - Truy cập: [http://localhost/phpmyadmin/](http://localhost/phpmyadmin/).
    - Tạo database tên `carrier_management` (đối chiếu `utf8mb4_unicode_ci`).
-   - Chọn database `carrier_management`, bấm **Nhập (Import)** và chọn tệp `database.sql` trong thư mục dự án để cài đặt cấu trúc bảng và dữ liệu mẫu.
+   - Chọn database `carrier_management`, bấm **Nhập (Import)** và chọn tệp `database.sql` trong thư mục dự án để cài đặt toàn bộ cấu trúc 6 bảng và dữ liệu mẫu.
 
 ---
 
