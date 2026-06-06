@@ -5,7 +5,7 @@ $host = '127.0.0.1';
 $port = '3307';
 $username = 'root';
 $password = '';
-$dbname = 'quanlynhahang';
+$dbname = 'carrier_management';
 
 try {
     // 1. Kết nối CSDL bằng PDO (không truyền dbname trước để tránh lỗi Unknown Database)
