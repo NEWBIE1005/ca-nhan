@@ -1,9 +1,10 @@
 <?php
 // Cấu hình kết nối Cơ sở dữ liệu MySQL trên XAMPP
+// Port 3306 + Password Kh@i2005 là cấu hình hoạt động đúng trên máy này
 $host = '127.0.0.1';
-$port = '3307'; // Cấu hình cổng 3307 từ XAMPP Control Panel
+$port = '3306';
 $username = 'root';
-$password = 'Kh@i2005'; // Sử dụng mật khẩu thực từ cấu hình XAMPP của bạn
+$password = 'Kh@i2005';
 $dbname = 'quanlynhahang';
 
 try {
