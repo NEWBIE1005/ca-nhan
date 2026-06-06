@@ -8,18 +8,29 @@ $password = '';
 $dbname = 'carrier_management';
 
 try {
-    // 1. Kết nối CSDL bằng PDO (không truyền dbname trước để tránh lỗi Unknown Database)
-    $conn = new PDO("mysql:host=$host;port=$port;charset=utf8mb4", $username, $password);
-    // Thiết lập chế độ báo lỗi ngoại lệ
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    // 1. Kết nối CSDL bằng PDO với UTF-8 rõ ràng
+    $options = [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES => false,
+        PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8mb4'
+    ];
+    $conn = new PDO("mysql:host=$host;port=$port;charset=utf8mb4", $username, $password, $options);
     
     // 2. Tự động tạo CSDL nếu chưa tồn tại
     $conn->exec("CREATE DATABASE IF NOT EXISTS `$dbname` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
     $conn->exec("USE `$dbname`");
     
-    // 3. Tự động tạo bảng và dữ liệu mẫu nếu chưa có
+    // 3. Tự động tạo bảng và dữ liệu mẫu nếu chưa có hoặc nếu dữ liệu bị mã hóa sai
     $tableExists = $conn->query("SHOW TABLES LIKE 'nha_van_chuyen'")->rowCount() > 0;
-    if (!$tableExists) {
+    $needsReset = false;
+    if ($tableExists) {
+        $row = $conn->query("SELECT ten_nha_xe FROM nha_van_chuyen LIMIT 1")->fetch();
+        if ($row && preg_match('/[ÃÄÅÂÄÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝ]/', $row['ten_nha_xe'])) {
+            $needsReset = true;
+        }
+    }
+    if (!$tableExists || $needsReset) {
         $sqlPath = __DIR__ . '/database.sql';
         if (file_exists($sqlPath)) {
             $sql = file_get_contents($sqlPath);
