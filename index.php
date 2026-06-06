@@ -91,12 +91,12 @@ $toast = isset($_SESSION['toast']) ? $_SESSION['toast'] : null;
 unset($_SESSION['toast']);
 ?>
 <!DOCTYPE html>
-<html lang="vi" data-bs-theme="dark">
+<html lang="vi" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GastroFlow - Quản Lý Nhà Vận Chuyển</title>
-    <!-- Bootstrap 5 CSS (Theme Dark) -->
+    <!-- Bootstrap 5 CSS (Theme Light) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -106,20 +106,23 @@ unset($_SESSION['toast']);
     <style>
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #0b0c10;
+            background-color: #f4f7fb;
+            color: #212529;
+        }
+        .navbar {
+            background-color: #ffffff;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
         }
         .navbar-brand {
             font-weight: 800;
             letter-spacing: -0.5px;
-            background: linear-gradient(to right, #ffffff, #6366f1);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #1d4ed8 !important;
         }
         .glass-card {
-            background: rgba(33, 37, 41, 0.45);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: #ffffff;
+            border: 1px solid rgba(15, 23, 42, 0.08);
             border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
         }
         .stat-icon {
             width: 48px;
@@ -130,6 +133,17 @@ unset($_SESSION['toast']);
             border-radius: 12px;
             font-size: 20px;
         }
+        .table {
+            background: #ffffff;
+        }
+        .table thead {
+            background-color: #f8fafc;
+        }
+        .form-control,
+        .form-select {
+            background-color: #ffffff;
+            color: #212529;
+        }
     </style>
 </head>
 <body>
@@ -138,11 +152,6 @@ unset($_SESSION['toast']);
     <nav class="navbar navbar-expand-lg border-bottom border-secondary border-opacity-25 py-3">
         <div class="container">
             <span class="navbar-brand fs-4"><i class="fa-solid fa-truck-fast me-2 text-primary"></i>GastroFlow Logistics</span>
-            <div class="d-flex align-items-center">
-                <a href="http://localhost/phpmyadmin/" target="_blank" class="btn btn-sm btn-outline-primary">
-                    <i class="fa-solid fa-database me-1"></i> Mở phpMyAdmin
-                </a>
-            </div>
         </div>
     </nav>
 

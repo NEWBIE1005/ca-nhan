@@ -30,9 +30,8 @@ GastroFlow Logistics là ứng dụng web quản lý danh sách và dịch vụ 
    - Bật **Apache** và **MySQL** trên **XAMPP Control Panel**.
    - Chú ý: Cấu hình cổng MySQL trên máy của bạn đang chạy ở cổng **3307**.
 3. **Import database**:
-   - Truy cập: [http://localhost/phpmyadmin/](http://localhost/phpmyadmin/).
    - Tạo database tên `carrier_management` (đối chiếu `utf8mb4_unicode_ci`).
-   - Chọn database `carrier_management`, bấm **Nhập (Import)** và chọn tệp `database.sql` trong thư mục dự án để cài đặt toàn bộ cấu trúc 6 bảng và dữ liệu mẫu.
+   - Chọn database `carrier_management`, bấm **Nhập (Import)** và chọn tệp `database.sql` trong thư mục dự án để cài đặt cấu trúc bảng và dữ liệu mẫu.
 
 ---
 
