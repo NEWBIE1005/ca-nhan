@@ -261,12 +261,12 @@ unset($_SESSION['toast']);
                                     </td>
                                     <td>
                                         <?php 
-                                        $srv = $carrier['loai_dich_vu'];
-                                        if ($srv === 'hoatoc') echo '<span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25">Hỏa Tốc</span>';
-                                        elseif ($srv === 'tietkiem') echo '<span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">Tiết Kiệm</span>';
-                                        elseif ($srv === 'congkenh') echo '<span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25">Hàng Cồng Kềnh</span>';
-                                        elseif ($srv === 'hanhkhach') echo '<span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25">Hành Khách</span>';
-                                        else echo '<span class="badge bg-secondary">'.htmlspecialchars($srv).'</span>';
+                                        $service = $carrier['loai_dich_vu'];
+                                        if ($service === 'hoatoc') echo '<span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25">Hỏa Tốc</span>';
+                                        elseif ($service === 'tietkiem') echo '<span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25">Tiết Kiệm</span>';
+                                        elseif ($service === 'congkenh') echo '<span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25">Hàng Cồng Kềnh</span>';
+                                        elseif ($service === 'hanhkhach') echo '<span class="badge bg-info bg-opacity-10 text-info border border-info border-opacity-25">Hành Khách</span>';
+                                        else echo '<span class="badge bg-secondary">'.htmlspecialchars($service).'</span>';
                                         ?>
                                     </td>
                                     <td class="text-primary fw-semibold"><?php echo number_format($carrier['phi_co_ban'], 0, ',', '.'); ?> đ</td>
